@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  idrl:
+    container_name: idrl
+    build: ./IDRL
+    ports:
+      - 8000:8000
+    volumes:
+      - ./IDRL:/app
