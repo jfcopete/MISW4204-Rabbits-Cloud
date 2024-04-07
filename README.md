@@ -11,7 +11,7 @@ Repositorio de Equipo (Rabbit) para el curso MISW4203 Desarrollo de software en 
 
 ### Comandos de inicio
 
-Para iniciar el aplicativo se requiere tener docker y docker compose instalado. Con los requisitos del proyecto se puede correr el comando: `docker-compose `up o `docker compose up` dependiendo de tu version de docker compose instalada
+Luego de tener los requisitos del proyecto correctamente instalados se puede correr el comando: `docker-compose up` o `docker compose up` dependiendo de la versión de docker compose instalada.
 
 ## Documentación
 

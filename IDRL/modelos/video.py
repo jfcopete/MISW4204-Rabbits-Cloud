@@ -1,5 +1,6 @@
 from datetime import datetime as date
 from typing import Optional
+from enum import Enum
 
 from sqlmodel import Field, SQLModel, Enum as SQLEnum
 
@@ -13,6 +14,6 @@ class Video(SQLModel, table=True):
     descripcion: str
     url: str
     es_valido: bool
-    estado: ESTADO_VIDEO = Field(sa_column_name=SQLEnum(ESTADO_VIDEO))
+    estado: ESTADO_VIDEO = Field(sa_column=SQLEnum(ESTADO_VIDEO))
     numero_votos: int    
-    fecha_creacion: Field(default=date.now())
+    # fecha_creacion: Field(default=date.now())
