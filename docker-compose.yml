@@ -8,22 +8,45 @@ services:
     volumes:
       - ./IDRL:/app
 
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
+  zookeeper:
+    image: 'bitnami/zookeeper:3.7.0'
+    container_name: zookeeper
+    user: root
     ports:
-      - "9092:9092"
+      - '2181:2181'
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181" 
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - ./bitnami/zookeeper:/bitnami/zookeeper
+  
+  kafka:
+    image: 'bitnami/kafka:2.8.0'
+    container_name: kafka
+    user: root
+    ports:
+      - "9093:9093"
+    expose:
+      - "9093"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CREATE_TOPICS="kafka_capstone_event_bus:1:1"
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+      - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
+    volumes:
+      - ./bitnami/kafka:/bitnami/kafka
 
-  zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
     ports:
-      - "2181:2181"
+     - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:9092" 
+    depends_on:
+      - kafka
