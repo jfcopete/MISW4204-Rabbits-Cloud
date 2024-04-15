@@ -1,44 +1,57 @@
-from dtos import TareaResponse
 from fastapi import UploadFile
+from dtos import TareaResponse
+from servicios.tarea import crear_tarea
+from servicios.kafka_services import send
 import shutil
 import os
 import cv2
 
-
-def save_video(video: UploadFile)-> TareaResponse:
+async def save_video(video: UploadFile)-> TareaResponse:
     current_path = os.getcwd()
     path = f"{current_path}/videos/"
-    file_path = f"{path}/{video.filename}"
-
-    print("start processing video")
-    procesar_video("Bryan Adams - Heaven.mp4")
-    print("end processing video")
 
     if not os.path.exists(path):
         os.makedirs(path)
 
+    existing_folders = [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
+    next_folder_name = str(len(existing_folders) + 1)
+    video_folder = os.path.join(path, next_folder_name)
+    os.makedirs(video_folder)
+
+    file_path = os.path.join(video_folder, f"original_{next_folder_name}.mp4")
+
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(video.file, buffer)
 
-    return TareaResponse(id=1, estado="Procesando", url=file_path)
+    tarea = crear_tarea(video.filename, file_path, "1")
+    print(f"Se ha creado la tarea desde el servicio de update video: {tarea['id']}")
 
+    #Enviar mensaje a kafka
+    await send(tarea['id'])
+    return TareaResponse(id=tarea['id'], estado="Procesando", url=file_path)
 
-def procesar_video(nombre_video: str):
+# def procesar_video(nombre_video: str):
+async def procesar_video(id: int):
+    print(f"El id de la tarea es: {id}")
+
     current_path = os.getcwd()
     logo = cv2.imread(f"{current_path}/img/logo.jpeg", cv2.IMREAD_UNCHANGED)
 
-    path = f"{current_path}/videos/{nombre_video}"
+    path = f"{current_path}/videos/{id}/original_{id}.mp4"
     archivo_video = cv2.VideoCapture(path)
 
     fps = archivo_video.get(cv2.CAP_PROP_FPS)
     
-    nombre_video_procesado = "heaven-processed.mp4"
-    output_path = f"{current_path}/videos/{nombre_video_procesado}"
+    nombre_video_procesado = "procesado.mp4"
+    output_path = f"{current_path}/videos/{id}"
     fourcc = cv2.VideoWriter_fourcc(*"XVID")
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
+    print("frame_ancho: ", frame_ancho)
     frame_alto = int(archivo_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    print("frame_alto: ", frame_alto)
 
     nuevo_frame_alto = int(frame_alto * 9 / 16)
+    print("nuevo_frame_alto: ", nuevo_frame_alto)
 
     salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
     logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
@@ -70,6 +83,7 @@ def procesar_video(nombre_video: str):
     # Release the video capture and writer objects
     archivo_video.release()
     salida.release()
+    return f"{current_path}/videos/{id}/{nombre_video_procesado}"
     # cv2.destroyAllWindows()
 
 

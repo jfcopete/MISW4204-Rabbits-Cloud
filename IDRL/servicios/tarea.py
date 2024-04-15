@@ -13,11 +13,11 @@ def traer_tarea():
     pass
 
 
-def crear_tarea(nombre_archivo: str, file_path: str, piloto_id: str) -> TareaResponse:
+def crear_tarea(nombre_archivo: str, url: str, piloto_id: str) -> TareaResponse:
     tarea = Tarea(
         nombre_archivo=nombre_archivo,
         piloto_id=piloto_id,
-        url=file_path,
+        url=url,
     )
 
     with Session(engine) as session:
