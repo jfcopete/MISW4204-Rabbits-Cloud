@@ -38,12 +38,14 @@ async def procesar_video(id: int):
     logo = cv2.imread(f"{current_path}/img/logo.jpeg", cv2.IMREAD_UNCHANGED)
 
     path = f"{current_path}/videos/{id}/original_{id}.mp4"
+    print(path)
     archivo_video = cv2.VideoCapture(path)
+    print(archivo_video)
 
     fps = archivo_video.get(cv2.CAP_PROP_FPS)
     
     nombre_video_procesado = "procesado.mp4"
-    output_path = f"{current_path}/videos/{id}"
+    output_path = f"{current_path}/videos/{id}/{nombre_video_procesado}"
     fourcc = cv2.VideoWriter_fourcc(*"XVID")
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
     print("frame_ancho: ", frame_ancho)
