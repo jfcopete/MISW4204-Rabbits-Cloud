@@ -19,7 +19,7 @@ async def send(idTask :int):
     print("mensaje enviado desde el productor de kafka_services")
     await setup_kafka_producer()
     topic = 'task'
-    message = {'id' : idTask}
+    message = idTask
     try:
         await producer.send_and_wait(topic, json.dumps(message))
         return {"mensaje_enviado": message}
