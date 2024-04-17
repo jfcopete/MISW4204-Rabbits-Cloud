@@ -17,6 +17,7 @@ async def setup_kafka_producer():
 # Cierra el productor cuando la aplicación se detiene
 async def close_kafka_producer():
     print("aqui se deberia cerrar el productor")
+    pass
     #await producer.stop()
 
 @router.post("/kafka", status_code=status.HTTP_201_CREATED)

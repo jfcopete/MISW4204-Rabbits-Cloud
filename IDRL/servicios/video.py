@@ -24,7 +24,6 @@ async def save_video(video: UploadFile)-> TareaResponse:
         shutil.copyfileobj(video.file, buffer)
 
     tarea = crear_tarea(video.filename, file_path, "1")
-    print(f"Se ha creado la tarea desde el servicio de update video: {tarea['id']}")
 
     #Enviar mensaje a kafka
     await send(tarea['id'])
@@ -38,9 +37,7 @@ async def procesar_video(id: int):
     logo = cv2.imread(f"{current_path}/img/logo.jpeg", cv2.IMREAD_UNCHANGED)
 
     path = f"{current_path}/videos/{id}/original_{id}.mp4"
-    print(path)
     archivo_video = cv2.VideoCapture(path)
-    print(archivo_video)
 
     fps = archivo_video.get(cv2.CAP_PROP_FPS)
     
@@ -48,12 +45,9 @@ async def procesar_video(id: int):
     output_path = f"{current_path}/videos/{id}/{nombre_video_procesado}"
     fourcc = cv2.VideoWriter_fourcc(*"XVID")
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
-    print("frame_ancho: ", frame_ancho)
     frame_alto = int(archivo_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    print("frame_alto: ", frame_alto)
 
     nuevo_frame_alto = int(frame_alto * 9 / 16)
-    print("nuevo_frame_alto: ", nuevo_frame_alto)
 
     salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
     logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))

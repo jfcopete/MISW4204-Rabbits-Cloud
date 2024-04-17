@@ -45,8 +45,9 @@ async def process_messages():
     global consumer
     try:
         async for msg in consumer:
-            id = int(msg.value)  
-            await procesar_video(id)
+            if msg and msg.value:
+                id = int(msg.value)
+                await procesar_video(id)
     except Exception as e:
         print(f"Error processing Kafka messages: {str(e)}")
 
