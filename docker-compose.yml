@@ -9,18 +9,20 @@ services:
       - ./IDRL:/app
 
   zookeeper:
-    image: 'bitnami/zookeeper:3.7.0'
+    image: "bitnami/zookeeper:3.7.0"
     container_name: zookeeper
     user: root
     ports:
-      - '2181:2181'
+      - "2181:2181"
+    depends_on:
+      - idrl
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
       - ./bitnami/zookeeper:/bitnami/zookeeper
-  
+
   kafka:
-    image: 'bitnami/kafka:2.8.0'
+    image: "bitnami/kafka:2.8.0"
     container_name: kafka
     user: root
     ports:
@@ -45,8 +47,8 @@ services:
     image: obsidiandynamics/kafdrop
     container_name: kafdrop
     ports:
-     - "9000:9000"
+      - "9000:9000"
     environment:
-      KAFKA_BROKERCONNECT: "kafka:9092" 
+      KAFKA_BROKERCONNECT: "kafka:9092"
     depends_on:
       - kafka

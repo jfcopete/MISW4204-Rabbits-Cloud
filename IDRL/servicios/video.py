@@ -31,7 +31,7 @@ async def save_video(video: UploadFile)-> TareaResponse:
 
 # def procesar_video(nombre_video: str):
 async def procesar_video(id: int):
-    print(f"El id de la tarea es: {id}")
+    print(f"El id de la tarea es -> {id}")
 
     current_path = os.getcwd()
     logo = cv2.imread(f"{current_path}/img/logo.jpeg", cv2.IMREAD_UNCHANGED)
@@ -43,7 +43,7 @@ async def procesar_video(id: int):
     
     nombre_video_procesado = "procesado.mp4"
     output_path = f"{current_path}/videos/{id}/{nombre_video_procesado}"
-    fourcc = cv2.VideoWriter_fourcc(*"XVID")
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_alto = int(archivo_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
