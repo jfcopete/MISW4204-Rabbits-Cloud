@@ -13,10 +13,10 @@ async def setup_kafka_producer():
 # Cierra el productor cuando la aplicación se detiene
 async def close_kafka_producer():
     print("instrucción de cerrar el productor")
-    #await producer.stop()
+    await producer.stop()
 
 async def send(idTask :int):
-    print("mensaje enviado desde el productor de kafka_services")
+    print("**** mensaje enviado desde el productor de kafka_services ****")
     await setup_kafka_producer()
     topic = 'task'
     message = idTask
