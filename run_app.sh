@@ -7,4 +7,10 @@ rm -rf /bitnami
 docker compose down
 
 # Correr los contenedores
-docker compose up
+docker compose up zookeeper -d
+sleep 10
+docker compose up kafka -d
+sleep 10
+docker compose up kafdrop -d
+sleep 10
+docker compose up idrl -d

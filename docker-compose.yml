@@ -3,10 +3,10 @@ services:
   idrl:
     container_name: idrl
     build: ./IDRL
-    depends_on:
-      - kafka
     ports:
       - 8000:8000
+    depends_on:
+      - kafdrop
     volumes:
       - ./IDRL:/app
 
@@ -17,8 +17,6 @@ services:
     restart: on-failure
     ports:
       - "2181:2181"
-    depends_on:
-      - idrl
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
@@ -28,6 +26,8 @@ services:
     image: "bitnami/kafka:2.8.0"
     container_name: kafka
     restart: on-failure
+    depends_on:
+      - zookeeper
     user: root
     ports:
       - "9093:9093"
@@ -42,8 +42,6 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
       - ALLOW_PLAINTEXT_LISTENER=yes
-    depends_on:
-      - zookeeper
     volumes:
       - ./bitnami/kafka:/bitnami/kafka
 
