@@ -7,6 +7,7 @@ from sqlmodel import Field, SQLModel, Enum as SQLEnum
 class ESTADO_VIDEO(str, Enum):
     PROCESSED: str = "processed"
     UPLOADED: str = "uploaded"
+    DELETED: str = "deleted"
 
 class Tarea(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

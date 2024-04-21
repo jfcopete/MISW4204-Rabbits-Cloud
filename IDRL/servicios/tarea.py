@@ -2,6 +2,7 @@ from modelos import Piloto, Tarea
 from sqlmodel import Session
 from libs.database import engine
 from dtos import TareaResponse
+import os
 
 def traer_tareas_por_piloto(piloto_id: int, max: int, orden: int) -> list[TareaResponse]:
     with Session(engine) as session:
@@ -21,8 +22,26 @@ def traer_tareas_por_piloto(piloto_id: int, max: int, orden: int) -> list[TareaR
         tareas = query.all()
         return tareas
 
-def traer_tarea():
-    pass
+def traer_tarea_por_id(tarea_id: int) -> dict:
+    with Session(engine) as session:
+        print("buscando tarea")
+        tarea = session.get(Tarea, tarea_id)
+        if not tarea:   
+            return {"error": "Tarea no encontrada"}
+        current_path = os.getcwd()
+        print("tarea encontrada")
+        video_procesado_path = f"{current_path}/videos_procesados/{tarea.id}/procesado.mp4"
+        download_link = f"http://localhost:8000{video_procesado_path}"
+
+        tarea_response = {
+        "id": tarea.id,
+        "estado": tarea.estado,
+        "url": tarea.url,
+        "download_link": download_link  
+        }
+
+        return tarea_response   
+    
 
 def crear_tarea(nombre_archivo: str, url: str, piloto_id: str) -> TareaResponse:
     tarea = Tarea(
@@ -63,3 +82,21 @@ def actualizar_tarea(tarea_id: int) -> TareaResponse:
             "piloto_id": tarea.piloto_id
         }
 
+def borrar_tarea_por_id(tarea_id: int) -> TareaResponse:
+    with Session(engine) as session:
+        tarea = session.get(Tarea, tarea_id)
+        if not tarea:
+            return {
+                "error": "Tarea no encontrada"
+            }
+        tarea.estado = "deleted"
+        session.commit()
+        return {
+            "id": tarea.id,
+            "nombre_archivo": tarea.nombre_archivo,
+            "url": tarea.url,
+            "estado": tarea.estado,
+            "numero_votos": tarea.numero_votos,
+            "marca_de_carga": tarea.marca_de_carga,
+            "piloto_id": tarea.piloto_id
+        }

@@ -34,7 +34,7 @@ async def procesar_video(id: int):
     print(f"El id de la tarea es -> {id}")
 
     current_path = os.getcwd()
-    logo = cv2.imread(f"{current_path}/img/logo.jpeg", cv2.IMREAD_UNCHANGED)
+    logo = cv2.imread(f"{current_path}/img/IDRL.jpg", cv2.IMREAD_UNCHANGED)
 
     path = f"{current_path}/videos/{id}/original_{id}.mp4"
     archivo_video = cv2.VideoCapture(path)
@@ -86,5 +86,8 @@ async def procesar_video(id: int):
     # cv2.destroyAllWindows()
 
 
-
+# async def borrar_video(id: int):
+#     current_path = os.getcwd()
+#     shutil.rmtree(f"{current_path}/videos/{id}")
+#     return {"message": "Videos eliminados correctamente"}
     

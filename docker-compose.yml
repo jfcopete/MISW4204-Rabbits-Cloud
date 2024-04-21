@@ -9,6 +9,7 @@ services:
       - kafdrop
     volumes:
       - ./IDRL:/app
+      - ./videos_procesados:/app/videos_procesados
 
   zookeeper:
     image: "bitnami/zookeeper:3.7.0"
