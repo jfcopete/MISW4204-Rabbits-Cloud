@@ -24,14 +24,10 @@ def traer_tareas_por_piloto(piloto_id: int, max: int, orden: int) -> list[TareaR
 
 def traer_tarea_por_id(tarea_id: int) -> dict:
     with Session(engine) as session:
-        print("buscando tarea")
         tarea = session.get(Tarea, tarea_id)
         if not tarea:   
             return {"error": "Tarea no encontrada"}
-        current_path = os.getcwd()
-        print("tarea encontrada")
-        video_procesado_path = f"{current_path}/videos_procesados/{tarea.id}/procesado.mp4"
-        download_link = f"http://localhost:8000{video_procesado_path}"
+        download_link = f"http://localhost:8000/api/tasks/{tarea_id}/download"
 
         tarea_response = {
         "id": tarea.id,
