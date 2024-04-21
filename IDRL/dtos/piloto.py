@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class PilotoDto(BaseModel):
     usuario: str
@@ -7,7 +8,7 @@ class PilotoDto(BaseModel):
     contrasena: str
 
 class PilotoResponse(BaseModel):
-    id: int
-    usuario: str
-    email: str
-    pais: str
+    mensaje: Optional[str]
+
+    class Config:
+        orm_mode = True

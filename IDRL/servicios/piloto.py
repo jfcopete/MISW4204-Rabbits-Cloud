@@ -1,28 +1,65 @@
-from dtos import PilotoDto
+from dtos import PilotoDto, PilotoResponse
+from dtos.authentication import SignUpRequest
 from modelos import Piloto
 from sqlmodel import Session
 from libs.database import engine
+import re
 
 def traer_pilotos_svc():
     with Session(engine) as session:
         pilotos = session.query(Piloto).all()
         return pilotos
 
-def crear_piloto_svc(nuevo_piloto: PilotoDto):
-    piloto = Piloto(
-        usuario=nuevo_piloto.usuario,
-        email=nuevo_piloto.email,
-        pais=nuevo_piloto.pais,
-        contrasena=nuevo_piloto.contrasena
-    )
-
+def crear_piloto_svc(request: SignUpRequest) -> PilotoResponse:
+    # Verificar si las contraseñas coinciden
+    if request.password1 != request.password2:
+        return PilotoResponse(mensaje="Las contraseñas no coinciden")
+    
+    # Verificar longitud mínima de la contraseña
+    if len(request.password1) < 8:
+        return PilotoResponse(mensaje="La contraseña debe tener al menos 8 caracteres")
+    
+    # Verificar al menos una mayúscula
+    if not re.search(r"[A-Z]", request.password1):
+        return PilotoResponse(mensaje="La contraseña debe tener al menos una mayúscula")
+    
+    # Verificar al menos una minúscula
+    if not re.search(r"[a-z]", request.password1):
+        return PilotoResponse(mensaje="La contraseña debe tener al menos una minúscula")
+    
+    # Verificar al menos un carácter especial
+    if not re.search(r"[!@#$%^&*()_+{}|:<>?~-]", request.password1):
+        return PilotoResponse(mensaje="La contraseña debe tener al menos un carácter especial")
+    
+    # Verificar si el usuario ya existe
     with Session(engine) as session:
-        session.add(piloto)
+        existing_piloto = session.query(Piloto).filter(Piloto.usuario == request.username).first()
+        if existing_piloto:
+            return PilotoResponse(mensaje="El usuario ya existe")
+        
+        # Verificar si el correo electrónico ya existe
+        existing_email = session.query(Piloto).filter(Piloto.email == request.email).first()
+        if existing_email:
+            return PilotoResponse(mensaje="El correo electrónico ya está en uso")
+        
+        # Crear el nuevo piloto
+        nuevo_piloto = Piloto(
+            usuario=request.username,
+            email=request.email,
+            contrasena=request.password1,
+            pais=request.pais
+        )
+        session.add(nuevo_piloto)
         session.commit()
-        return {
-            "id": piloto.id,
-            "usuario": piloto.usuario,
-            "email": piloto.email,
-            "pais": piloto.pais
-        }
+        
+        # Creación exitosa de usuario
+        return PilotoResponse(
+            mensaje="Cuenta creada exitosamente"
+        )
 
+        
+        
+
+
+
+    
