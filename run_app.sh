@@ -13,4 +13,6 @@ docker compose up kafka -d
 sleep 10
 docker compose up kafdrop -d
 sleep 10
+docker compose up postgres-db -d
+sleep 10
 docker compose up idrl -d
