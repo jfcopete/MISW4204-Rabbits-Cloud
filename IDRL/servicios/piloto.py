@@ -1,7 +1,8 @@
 from dtos import PilotoDto, PilotoResponse
-from dtos.authentication import SignUpRequest
+from dtos.authentication import SignUpRequest, User
 from modelos import Piloto
 from sqlmodel import Session
+from jwt_manager import create_token
 from libs.database import engine
 import re
 
@@ -58,8 +59,12 @@ def crear_piloto_svc(request: SignUpRequest) -> PilotoResponse:
         )
 
         
-        
-
-
-
-    
+def autenticar_piloto_svc(request: User) -> str:
+    with Session(engine) as session:
+        piloto = session.query(Piloto).filter(Piloto.usuario == request.username).first() 
+        if not piloto:
+            return {"mensaje" : "Usuario no existe"}
+        if not piloto.contrasena == request.password:
+            return {"mensaje" : "Password incorrecta"}
+        created_token : str = create_token(request.dict())
+        return {"token" : created_token}

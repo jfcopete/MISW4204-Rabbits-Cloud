@@ -6,3 +6,7 @@ class SignUpRequest(BaseModel):
     password1: str
     password2: str
     pais: str
+
+class User(BaseModel):
+    username: str
+    password: str

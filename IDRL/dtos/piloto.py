@@ -12,3 +12,4 @@ class PilotoResponse(BaseModel):
 
     class Config:
         orm_mode = True
+

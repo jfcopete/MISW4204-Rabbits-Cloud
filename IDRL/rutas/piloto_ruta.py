@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
-from dtos.authentication import SignUpRequest
-from dtos import PilotoResponse
-from servicios import crear_piloto_svc, traer_pilotos_svc
+from dtos.authentication import SignUpRequest, User
+from dtos import PilotoResponse, PilotoDto
+from servicios import crear_piloto_svc, traer_pilotos_svc, autenticar_piloto_svc
 
 router = APIRouter()
 
@@ -14,3 +14,8 @@ def traer_pilotos():
 def signup_piloto(request: SignUpRequest) -> PilotoResponse:
     piloto_respuesta = crear_piloto_svc(request)
     return piloto_respuesta
+
+@router.post("/api/auth/login", status_code=status.HTTP_200_OK)
+def login(user: User):
+    user = autenticar_piloto_svc(user)
+    return user
