@@ -55,7 +55,7 @@ services:
     depends_on:
       - kafka
 
-  postgres:
+  postgres-db:
     image: "postgres:13.3"
     container_name: postgres
     restart: on-failure
@@ -67,3 +67,6 @@ services:
       - POSTGRES_DB=dron_db
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
