@@ -5,11 +5,8 @@ from jwt_manager import JWTBearer
 
 router = APIRouter()
 
-@router.post("/video", status_code=status.HTTP_201_CREATED, dependencies=[Depends(JWTBearer())])
-async def upload_video(video: UploadFile = File(...)) -> TareaResponse:
+@router.post("/api/tasks", status_code=status.HTTP_201_CREATED, dependencies=[Depends(JWTBearer())])
+async def upload_video(video: UploadFile = File(...)) -> str:
     video_response = await save_video(video)
-    return {
-        "id": video_response.id,
-        "estado": video_response.estado,
-        "url": video_response.url
-    }
+    return f"Tarea de edición de video creada exitosamente, id: {video_response.id}"
+    

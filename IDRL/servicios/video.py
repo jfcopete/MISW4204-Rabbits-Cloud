@@ -1,6 +1,6 @@
 from fastapi import UploadFile
 from dtos import TareaResponse
-from servicios.tarea import crear_tarea
+from servicios.tarea import crear_tarea, actualizar_tarea
 from servicios.kafka_services import send
 import shutil
 import os
@@ -79,6 +79,9 @@ async def procesar_video(id: int):
     # Release the video capture and writer objects
     archivo_video.release()
     salida.release()
+
+    # Se actualiza el estado de la tarea al finalizar el procesamiento
+    actualizar_tarea(id)
     return f"{current_path}/videos/{id}/{nombre_video_procesado}"
     # cv2.destroyAllWindows()
 
