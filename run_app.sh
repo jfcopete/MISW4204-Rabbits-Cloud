@@ -15,4 +15,4 @@ docker compose up kafdrop -d
 sleep 10
 docker compose up postgres-db -d
 sleep 10
-docker compose up idrl -d
+docker compose up idrl -d --build --force-recreate

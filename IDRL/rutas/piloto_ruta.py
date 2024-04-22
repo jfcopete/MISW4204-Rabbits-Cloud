@@ -7,7 +7,7 @@ from jwt_manager import JWTBearer
 
 router = APIRouter()
 
-@router.get("/pilotos", status_code=status.HTTP_200_OK)
+@router.get("/pilotos", status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 def traer_pilotos():
     pilotos = traer_pilotos_svc()
     return pilotos    

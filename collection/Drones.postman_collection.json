@@ -1,0 +1,446 @@
+{
+	"info": {
+		"_postman_id": "c488ec07-891a-4e23-9f0a-4af66a0cdaad",
+		"name": "Drones",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4604238",
+		"_collection_link": "https://roshi-master.postman.co/workspace/Cloud---Rabbits~a9798089-49ac-420e-bb9c-763726e69248/collection/4604238-c488ec07-891a-4e23-9f0a-4af66a0cdaad?action=share&source=collection_link&creator=4604238"
+	},
+	"item": [
+		{
+			"name": "piloto",
+			"item": [
+				{
+					"name": "SignUp Fail 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La contraseña debe tener al menos un carácter especial\", function () {\r",
+									"    pm.expect(pm.response.json().mensaje).to.eql(\"La contraseña debe tener al menos un carácter especial\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"piloto6\",\r\n    \"email\":\"piloto3@mail.com\",\r\n    \"pais\":\"colombia\",\r\n    \"password1\":\"Password\",\r\n    \"password2\":\"Password\"\r\n}   ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/auth/signup",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SignUp Fail 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La contraseña debe tener al menos un carácter especial\", function () {\r",
+									"    pm.expect(pm.response.json().mensaje).to.eql(\"Las contraseñas no coinciden\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"piloto6\",\r\n    \"email\":\"piloto3@mail.com\",\r\n    \"pais\":\"colombia\",\r\n    \"password1\":\"password!\",\r\n    \"password2\":\"Password!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/auth/signup",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SignUp Succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"La contraseña debe tener al menos un carácter especial\", function () {\r",
+									"    pm.expect(pm.response.json().mensaje).to.eql(\"Cuenta creada exitosamente\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"usuario nuevo2\",\r\n    \"email\":\"newuser2@mail.com\",\r\n    \"pais\":\"colombia\",\r\n    \"password1\":\"Password!\",\r\n    \"password2\":\"Password!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/auth/signup",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Fail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"usuario nuevo2\",\r\n    \"password\": \"Passwor\"\r\n}   ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/auth/login",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"usuario nuevo2\",\r\n    \"password\": \"Password!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/auth/login",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "traer_todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/pilotos",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"pilotos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "video",
+			"item": [
+				{
+					"name": "subir_video",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8gbnVldm8yIiwicGFzc3dvcmQiOiJQYXNzd29yZCEifQ.KBJwA8xOHYdko5hHG8tGOsUzypVUSHJDIe0uoxTbIlQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "video",
+									"type": "file",
+									"src": "postman-cloud:///1eef7b42-6c65-4490-a7ac-438ceee1657a"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{api_url}}/api/tasks",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Video",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8gbnVldm8yIiwicGFzc3dvcmQiOiJQYXNzd29yZCEifQ.KBJwA8xOHYdko5hHG8tGOsUzypVUSHJDIe0uoxTbIlQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/tasks/1/download",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"1",
+								"download"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "Traer tareas por piloto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8gbnVldm8yIiwicGFzc3dvcmQiOiJQYXNzd29yZCEifQ.KBJwA8xOHYdko5hHG8tGOsUzypVUSHJDIe0uoxTbIlQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/tasks?piloto_id=1&max=2&orden=1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "piloto_id",
+									"value": "1"
+								},
+								{
+									"key": "max",
+									"value": "2"
+								},
+								{
+									"key": "orden",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Traer tarea por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8gbnVldm8yIiwicGFzc3dvcmQiOiJQYXNzd29yZCEifQ.KBJwA8xOHYdko5hHG8tGOsUzypVUSHJDIe0uoxTbIlQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/tasks/2",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar tarea",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8gbnVldm8yIiwicGFzc3dvcmQiOiJQYXNzd29yZCEifQ.KBJwA8xOHYdko5hHG8tGOsUzypVUSHJDIe0uoxTbIlQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api_url}}/api/tasks/2",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api_url",
+			"value": "34.170.76.106:8000",
+			"type": "string"
+		}
+	]
+}
