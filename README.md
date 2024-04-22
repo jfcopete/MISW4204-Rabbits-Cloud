@@ -2,7 +2,11 @@
 
 Repositorio de Equipo (Rabbit) para el curso MISW4203 Desarrollo de software en la nube
 
-## Iniciar el projecto
+## Projecto en nube
+
+El projecto esta alojado en una VM en GCP en la ruta: `34.170.76.106:8000` dentro del repositorio se encuentran las colecciones de postman para ser importadas.
+
+## Iniciar el projecto en local
 
 ### Requisitos
 
@@ -11,7 +15,7 @@ Repositorio de Equipo (Rabbit) para el curso MISW4203 Desarrollo de software en 
 
 ### Comandos de inicio
 
-Luego de tener los requisitos del proyecto correctamente instalados se puede correr el comando: `docker-compose up` o `docker compose up` dependiendo de la versión de docker compose instalada.
+Luego de tener los requisitos del proyecto correctamente instalados se puede correr el comando: `bash run_app`
 
 ## Documentación
 
