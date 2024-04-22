@@ -55,19 +55,18 @@ services:
       KAFKA_BROKERCONNECT: "kafka:9092"
     depends_on:
       - kafka
+#   postgres-db:
+#     image: "postgres:13.3"
+#     container_name: postgres
+#     restart: on-failure
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=dron_db
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
 
-  postgres-db:
-    image: "postgres:13.3"
-    container_name: postgres
-    restart: on-failure
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=dron_db
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
+# volumes:
+#   pgdata:
