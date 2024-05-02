@@ -5,9 +5,13 @@ name = "pypi"
 
 [packages]
 fastapi = "==0.110.1"
+sqlmodel = "==0.0.16"
+python-multipart = "==0.0.9"
 uvicorn = {extras = ["standard"], version = "==0.29.0"}
-sqlmodel = "*"
-python-multipart = "*"
+opencv-python-headless = "==4.9.0.80"
+aiokafka = "*"
+psycopg2-binary = "*"
+pyjwt = "*"
 
 [dev-packages]
 

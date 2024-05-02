@@ -14,7 +14,7 @@ async def setup_kafka_consumer():
     try:
         consumer = AIOKafkaConsumer(
             'task',
-            bootstrap_servers='kafka:9092',
+            bootstrap_servers='http://104.197.98.214:9092',
             group_id='my-group',
             auto_offset_reset='earliest',
             value_deserializer=lambda v: json.loads(v.decode('utf-8'))

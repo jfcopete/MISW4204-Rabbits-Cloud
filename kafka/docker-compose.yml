@@ -21,6 +21,7 @@ services:
     user: root
     ports:
       - "9093:9093"
+      - "9092:9092"
     expose:
       - "9093"
     environment:
