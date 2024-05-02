@@ -1,0 +1,1 @@
+print("Se ha ejecutado el archivo almacenar_video.py con exito")

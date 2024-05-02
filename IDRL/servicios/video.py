@@ -6,6 +6,7 @@ import shutil
 import os
 import cv2
 
+# Servicio para cargar un video
 async def save_video(video: UploadFile)-> TareaResponse:
     current_path = os.getcwd()
     path = f"{current_path}/videos/"
@@ -29,7 +30,7 @@ async def save_video(video: UploadFile)-> TareaResponse:
     await send(tarea['id'])
     return TareaResponse(id=tarea['id'], estado="Procesando", url=file_path)
 
-# def procesar_video(nombre_video: str):
+# Servicio para procesar un video
 async def procesar_video(id: int):
     print(f"El id de la tarea es -> {id}")
 
@@ -83,11 +84,4 @@ async def procesar_video(id: int):
     # Se actualiza el estado de la tarea al finalizar el procesamiento
     actualizar_tarea(id)
     return f"{current_path}/videos/{id}/{nombre_video_procesado}"
-    # cv2.destroyAllWindows()
 
-
-# async def borrar_video(id: int):
-#     current_path = os.getcwd()
-#     shutil.rmtree(f"{current_path}/videos/{id}")
-#     return {"message": "Videos eliminados correctamente"}
-    
