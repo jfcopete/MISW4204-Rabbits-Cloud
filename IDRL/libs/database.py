@@ -14,7 +14,5 @@ engine = create_engine('sqlite:///' + db_directorio, echo=False)
 #     pg_url, echo=False
 # )
 
-
-
 SQLModel.metadata.create_all(engine)
 
