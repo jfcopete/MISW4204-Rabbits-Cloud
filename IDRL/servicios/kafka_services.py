@@ -2,7 +2,7 @@ from aiokafka import AIOKafkaProducer
 import json
 
 producer = AIOKafkaProducer(
-    bootstrap_servers='http://104.197.98.214:9092',
+    bootstrap_servers='104.197.98.214:9093',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
