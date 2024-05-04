@@ -1,30 +1,20 @@
 from fastapi import UploadFile
 from dtos import TareaResponse
-from servicios.tarea import crear_tarea, actualizar_tarea
+from servicios.tarea import crear_tarea, actualizar_tarea, actualizar_tarea_url
 from servicios.kafka_services import send
-import shutil
 import os
 import cv2
+from libs.cool_storage import crear_instancia_de_cloud_storage
 
 # Servicio para cargar un video
 async def save_video(video: UploadFile)-> TareaResponse:
-    current_path = os.getcwd()
-    path = f"{current_path}/videos/"
 
-    if not os.path.exists(path):
-        os.makedirs(path)
+    tarea_saved = crear_tarea(video.filename, "", "1")
 
-    existing_folders = [name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))]
-    next_folder_name = str(len(existing_folders) + 1)
-    video_folder = os.path.join(path, next_folder_name)
-    os.makedirs(video_folder)
-
-    file_path = os.path.join(video_folder, f"original_{next_folder_name}.mp4")
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(video.file, buffer)
-
-    tarea = crear_tarea(video.filename, file_path, "1")
+    cool_storage = crear_instancia_de_cloud_storage()    
+    file_path = cool_storage.upload_file(tarea_saved["id"], video)
+    
+    tarea = actualizar_tarea_url(tarea_saved['id'], file_path)
 
     #Enviar mensaje a kafka
     await send(tarea['id'])

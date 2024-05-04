@@ -100,3 +100,22 @@ def borrar_tarea_por_id(tarea_id: int) -> TareaResponse:
             "marca_de_carga": tarea.marca_de_carga,
             "piloto_id": tarea.piloto_id
         }
+
+def actualizar_tarea_url(tarea_id: str, tarea_url: str) -> TareaResponse:
+     with Session(engine) as session:
+        tarea = session.get(Tarea, tarea_id)
+        if not tarea:
+            return {
+                "error": "Tarea no encontrada"
+            }
+        tarea.url = tarea_url,
+        session.commit()
+        return {
+            "id": tarea.id,
+            "nombre_archivo": tarea.nombre_archivo,
+            "url": tarea_url,
+            "estado": tarea.estado,
+            "numero_votos": tarea.numero_votos,
+            "marca_de_carga": tarea.marca_de_carga,
+            "piloto_id": tarea.piloto_id
+        }
