@@ -6,7 +6,6 @@ POSTGRES_PASSWORD=""
 POSTGRES_DB="dron_db"
 VOLUME_NAME="pgdata"
 
-# Check if the volume exists
 if [ $(docker volume ls -q -f name=$VOLUME_NAME) ]; then
     echo "Volume $VOLUME_NAME already exists."
 else
@@ -16,5 +15,5 @@ fi
 
 docker pull postgres:13.3
 
-# Run the PostgreSQL container
+# Run container
 docker run --name $CONTAINER_NAME -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -v $VOLUME_NAME:/var/lib/postgresql/data -p 5432:5432 -d postgres:13.3
