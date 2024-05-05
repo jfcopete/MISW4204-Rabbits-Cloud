@@ -11,5 +11,5 @@ crear_instancia_de_cloud_storage()
 
 app.include_router(piloto_ruta.router)
 app.include_router(video_ruta.router)
-app.include_router(kafka_consumer.router)
+# app.include_router(kafka_consumer.router)
 

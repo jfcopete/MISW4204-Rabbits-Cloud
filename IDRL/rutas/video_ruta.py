@@ -1,9 +1,7 @@
 from fastapi import APIRouter, status, UploadFile, File, Depends, Response
-from fastapi.responses import FileResponse
 from dtos import TareaDto, TareaResponse
 from servicios import save_video, descargar_video_procesado
 from jwt_manager import JWTBearer
-import os
 
 router = APIRouter()
 
