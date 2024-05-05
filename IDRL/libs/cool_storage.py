@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from google.cloud import storage
 from libs import traer_configuraciones
 
@@ -20,12 +21,17 @@ class CoolStorage:
         blob = bucket.blob(file_path)
         blob.upload_from_file(archivo.file, content_type='video/mp4')
 
-        return f'gs://{file_path}'
+        return f'{file_path}'
     
     def download_file(self, video_id: int, file_name: str):
         bucket = self.storage_client.get_bucket(self.bucket)
         blob = bucket.blob(f'videos/{video_id}/{file_name}')
-        return blob.download_as_string()
+
+        if not blob.exists():
+            raise HTTPException(status_code=404, detail="Archivo no encontrado")
+        bytes_buffer = blob.download_as_bytes()
+
+        return bytes_buffer
     
 @lru_cache
 def crear_instancia_de_cloud_storage():

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, UploadFile, File, Depends
+from fastapi import APIRouter, status, UploadFile, File, Depends, Response
 from fastapi.responses import FileResponse
 from dtos import TareaDto, TareaResponse
 from servicios import save_video, descargar_video_procesado
@@ -15,16 +15,21 @@ async def upload_video(video: UploadFile = File(...)) -> str:
     
 #Endpoint para descargar el video procesado
 @router.get("/api/tasks/{tarea_id}/download", status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
-async def descargar_video_procesado(tarea_id: int):
-    ruta_video_procesado = None 
+def descargar_video(tarea_id: int):
+    contenido_archivo = None 
     try: 
-        ruta_video_procesado = descargar_video_procesado()
+        contenido_archivo = descargar_video_procesado(tarea_id)
     except Exception as e:
         return {"error": "Descargando el video"}
     
-    if not ruta_video_procesado:
+    if not contenido_archivo:
         return {"error": "Video procesado no encontrado"}
+    
+    headers = {
+        "Content-Disposition": f"attachment; filename=video_procesado.mp4",
+        "Content-Type": "video/mp4"
+    }
 
-    # Devolver el archivo como respuesta utilizando FileResponse
-    return FileResponse(ruta_video_procesado, media_type="video/mp4", filename="video_procesado.mp4")
+    
+    return Response(content=contenido_archivo, headers=headers)
 

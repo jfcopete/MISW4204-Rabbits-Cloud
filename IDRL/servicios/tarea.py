@@ -35,7 +35,8 @@ def traer_tarea_por_id(tarea_id: int) -> dict:
         "id": tarea.id,
         "estado": tarea.estado,
         "url": tarea.url,
-        "download_link": download_link  
+        "download_link": download_link,
+        "nombre_archivo": tarea.nombre_archivo,
         }
 
         return tarea_response   

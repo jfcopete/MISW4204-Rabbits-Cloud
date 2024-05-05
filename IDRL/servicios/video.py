@@ -21,10 +21,15 @@ async def save_video(video: UploadFile)-> TareaResponse:
     return TareaResponse(id=tarea['id'], estado="Procesando", url=file_path)
 
 def descargar_video_procesado(video_id: int):
-    pass
-    # tarea = traer_tarea_por_id(video_id)
-    # cool_storage = crear_instancia_de_cloud_storage()
-    # return cool_storage.download_file(video_id, file_name)
+    tarea = traer_tarea_por_id(video_id)
+    if not tarea:
+        return None
+    
+    cool_storage = crear_instancia_de_cloud_storage()
+    bytes = cool_storage.download_file(video_id, f'original_{tarea["nombre_archivo"]}')
+    
+    return bytes
+
 
 # Servicio para procesar un video
 async def procesar_video(id: int):
