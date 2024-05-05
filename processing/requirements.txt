@@ -1,6 +1,10 @@
+fastapi==0.110.1
+uvicorn[standard]==0.29.0
 sqlmodel==0.0.16
 python-multipart==0.0.9
 opencv-python-headless==4.9.0.80
 aiokafka
-psycopg2-binary
-pyjwt
+psycopg2-binary==2.9.9
+google-cloud==0.34.0
+pydantic-settings==2.2.1
+google-cloud-storage

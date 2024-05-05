@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     DB_HOST: str
     DB_PORT: int
+    KAFKA_HOST: str
 
     model_config = SettingsConfigDict(env_file=".env")
 
