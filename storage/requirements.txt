@@ -1,6 +1,0 @@
-sqlmodel==0.0.16
-python-multipart==0.0.9
-opencv-python-headless==4.9.0.80
-aiokafka
-psycopg2-binary
-pyjwt
