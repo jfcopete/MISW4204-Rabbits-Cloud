@@ -22,6 +22,11 @@ class CoolStorage:
 
         return f'gs://{file_path}'
     
+    def download_file(self, video_id: int, file_name: str):
+        bucket = self.storage_client.get_bucket(self.bucket)
+        blob = bucket.blob(f'videos/{video_id}/{file_name}')
+        return blob.download_as_string()
+    
 @lru_cache
 def crear_instancia_de_cloud_storage():
     return CoolStorage()

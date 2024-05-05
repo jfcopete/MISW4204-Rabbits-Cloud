@@ -1,6 +1,6 @@
 from fastapi import UploadFile
 from dtos import TareaResponse
-from servicios.tarea import crear_tarea, actualizar_tarea, actualizar_tarea_url
+from servicios.tarea import crear_tarea, actualizar_tarea, actualizar_tarea_url, traer_tarea_por_id
 from servicios.kafka_services import send
 import os
 import cv2
@@ -19,6 +19,12 @@ async def save_video(video: UploadFile)-> TareaResponse:
     #Enviar mensaje a kafka
     await send(tarea['id'])
     return TareaResponse(id=tarea['id'], estado="Procesando", url=file_path)
+
+def descargar_video_procesado(video_id: int):
+    pass
+    # tarea = traer_tarea_por_id(video_id)
+    # cool_storage = crear_instancia_de_cloud_storage()
+    # return cool_storage.download_file(video_id, file_name)
 
 # Servicio para procesar un video
 async def procesar_video(id: int):
