@@ -4,6 +4,7 @@ from libs.database import engine
 from dtos import TareaResponse
 import os
 
+# Servicio para traer todas las tareas de un piloto
 def traer_tareas_por_piloto(piloto_id: int, max: int, orden: int) -> list[TareaResponse]:
     with Session(engine) as session:
         # Construir la consulta base filtrando por piloto_id
@@ -22,6 +23,7 @@ def traer_tareas_por_piloto(piloto_id: int, max: int, orden: int) -> list[TareaR
         tareas = query.all()
         return tareas
 
+# Servicio para traer una tarea por id
 def traer_tarea_por_id(tarea_id: int) -> dict:
     with Session(engine) as session:
         tarea = session.get(Tarea, tarea_id)
@@ -33,12 +35,13 @@ def traer_tarea_por_id(tarea_id: int) -> dict:
         "id": tarea.id,
         "estado": tarea.estado,
         "url": tarea.url,
-        "download_link": download_link  
+        "download_link": download_link,
+        "nombre_archivo": tarea.nombre_archivo,
         }
 
         return tarea_response   
     
-
+# Servicio para crear una nueva tarea
 def crear_tarea(nombre_archivo: str, url: str, piloto_id: str) -> TareaResponse:
     tarea = Tarea(
         nombre_archivo=nombre_archivo,
@@ -58,7 +61,8 @@ def crear_tarea(nombre_archivo: str, url: str, piloto_id: str) -> TareaResponse:
             "marca_de_carga": tarea.marca_de_carga,
             "piloto_id": tarea.piloto_id
         }
-    
+
+# Servicio para actualizar una tarea
 def actualizar_tarea(tarea_id: int) -> TareaResponse:
     with Session(engine) as session:
         tarea = session.get(Tarea, tarea_id)
@@ -78,6 +82,7 @@ def actualizar_tarea(tarea_id: int) -> TareaResponse:
             "piloto_id": tarea.piloto_id
         }
 
+# Servicio para borrar una tarea
 def borrar_tarea_por_id(tarea_id: int) -> TareaResponse:
     with Session(engine) as session:
         tarea = session.get(Tarea, tarea_id)
@@ -91,6 +96,25 @@ def borrar_tarea_por_id(tarea_id: int) -> TareaResponse:
             "id": tarea.id,
             "nombre_archivo": tarea.nombre_archivo,
             "url": tarea.url,
+            "estado": tarea.estado,
+            "numero_votos": tarea.numero_votos,
+            "marca_de_carga": tarea.marca_de_carga,
+            "piloto_id": tarea.piloto_id
+        }
+
+def actualizar_tarea_url(tarea_id: str, tarea_url: str) -> TareaResponse:
+     with Session(engine) as session:
+        tarea = session.get(Tarea, tarea_id)
+        if not tarea:
+            return {
+                "error": "Tarea no encontrada"
+            }
+        tarea.url = tarea_url,
+        session.commit()
+        return {
+            "id": tarea.id,
+            "nombre_archivo": tarea.nombre_archivo,
+            "url": tarea_url,
             "estado": tarea.estado,
             "numero_votos": tarea.numero_votos,
             "marca_de_carga": tarea.marca_de_carga,

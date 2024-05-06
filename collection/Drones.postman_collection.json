@@ -219,6 +219,16 @@
 				{
 					"name": "traer_todos",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8gbnVldm8yIiwicGFzc3dvcmQiOiJQYXNzd29yZCEifQ.KBJwA8xOHYdko5hHG8tGOsUzypVUSHJDIe0uoxTbIlQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -414,6 +424,16 @@
 			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8gbnVldm8yIiwicGFzc3dvcmQiOiJQYXNzd29yZCEifQ.KBJwA8xOHYdko5hHG8tGOsUzypVUSHJDIe0uoxTbIlQ",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",

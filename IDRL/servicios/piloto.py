@@ -6,11 +6,13 @@ from jwt_manager import create_token
 from libs.database import engine
 import re
 
+# Servicio para traer todos los pilotos
 def traer_pilotos_svc():
     with Session(engine) as session:
         pilotos = session.query(Piloto).all()
         return pilotos
 
+# Servicio para crear un piloto
 def crear_piloto_svc(request: SignUpRequest) -> PilotoResponse:
     # Verificar si las contraseñas coinciden
     if request.password1 != request.password2:
@@ -58,7 +60,7 @@ def crear_piloto_svc(request: SignUpRequest) -> PilotoResponse:
             mensaje="Cuenta creada exitosamente"
         )
 
-        
+# Servicio para autenticar un piloto
 def autenticar_piloto_svc(request: User) -> str:
     with Session(engine) as session:
         piloto = session.query(Piloto).filter(Piloto.usuario == request.username).first() 

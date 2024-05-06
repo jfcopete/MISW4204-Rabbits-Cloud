@@ -9,7 +9,6 @@ services:
       - kafdrop
     volumes:
       - ./IDRL:/app
-      - ./videos_procesados:/app/videos_procesados
 
   zookeeper:
     image: "bitnami/zookeeper:3.7.0"
@@ -68,6 +67,20 @@ services:
       - POSTGRES_DB=dron_db
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  processing:
+    # Contenedor Docker para servicio encargado de procesar los videos
+    container_name: processing
+    build: ./processing
+    volumes:
+      - ./videos:/app/videos
+
+  storage:
+    # Contenedor Docker para servicio encargado de almacenar los videos
+    container_name: storage
+    build: ./storage
+    volumes:
+      - ./videos:/app/videos
 
 volumes:
   pgdata:

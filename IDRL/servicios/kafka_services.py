@@ -1,8 +1,11 @@
 from aiokafka import AIOKafkaProducer
 import json
+from libs.settings import traer_configuraciones
+
+configuraciones = traer_configuraciones()
 
 producer = AIOKafkaProducer(
-    bootstrap_servers='kafka:9092',
+    bootstrap_servers=configuraciones.KAFKA_HOST,
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 

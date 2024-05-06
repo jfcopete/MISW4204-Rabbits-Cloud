@@ -4,3 +4,5 @@ videos/
 .DS_*
 bitnami/
 0000*
+.env
+vinilos-bk*
