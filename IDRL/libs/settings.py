@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     DB_HOST: str
     DB_PORT: int
     KAFKA_HOST: str
+    PUBSUB_TOPIC_NAME: str
+    PUBSUB_SUBSCRIPTION_NAME: str
 
     model_config = SettingsConfigDict(env_file=".env")
 

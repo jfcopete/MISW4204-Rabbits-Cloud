@@ -5,6 +5,7 @@ from servicios.kafka_services import send
 import os
 import cv2
 from libs.cool_storage import crear_instancia_de_cloud_storage
+from libs.cloud_pubsub import get_pubsub_instance
 
 # Servicio para cargar un video
 async def save_video(video: UploadFile)-> TareaResponse:
@@ -12,12 +13,17 @@ async def save_video(video: UploadFile)-> TareaResponse:
     tarea_saved = crear_tarea(video.filename, "", "1")
 
     cool_storage = crear_instancia_de_cloud_storage()    
+    pubsub_instance = get_pubsub_instance()
     file_path = cool_storage.upload_file(tarea_saved["id"], video)
     
     tarea = actualizar_tarea_url(tarea_saved['id'], file_path)
 
     #Enviar mensaje a kafka
-    await send(tarea['id'])
+    #await send(tarea['id'])
+
+    #Enviar mensaje a Cloud Pub Sub
+    await pubsub_instance.publish_message(tarea['id'])
+    
     return TareaResponse(id=tarea['id'], estado="Procesando", url=file_path)
 
 def descargar_video_procesado(video_id: int):
