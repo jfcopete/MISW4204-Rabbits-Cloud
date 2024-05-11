@@ -23,7 +23,7 @@ class CloudPubSub:
 
     def publish_message(self, message_data: str):
         topic_path = self.publisher.topic_path(self.project_id, self.topic_name)
-        future = self.publisher.publish(topic_path, data=message_data.encode('utf-8'))
+        future = self.publisher.publish(topic_path, data=message_data)
         future.result()
 
     def subscribe_to_messages(self, callback):

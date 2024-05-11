@@ -21,8 +21,11 @@ async def save_video(video: UploadFile)-> TareaResponse:
     #Enviar mensaje a kafka
     #await send(tarea['id'])
 
+    # Convertir el mensaje a bytestring
+    message_data = tarea['id'].encode()
+
     #Enviar mensaje a Cloud Pub Sub
-    await pubsub_instance.publish_message(tarea['id'])
+    await pubsub_instance.publish_message(message_data)
     
     return TareaResponse(id=tarea['id'], estado="Procesando", url=file_path)
 
