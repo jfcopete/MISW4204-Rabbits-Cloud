@@ -3,7 +3,8 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     BUCKET_NAME: str
-    CREDENTIAL_FILE: str
+    CREDENTIAL_FILE_STORAGE: str
+    CREDENTIAL_FILE_PUBSUB: str
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str

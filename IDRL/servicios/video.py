@@ -1,7 +1,6 @@
 from fastapi import UploadFile
 from dtos import TareaResponse
 from servicios.tarea import crear_tarea, actualizar_tarea, actualizar_tarea_url, traer_tarea_por_id
-from servicios.kafka_services import send
 import os
 import cv2
 from libs.cool_storage import crear_instancia_de_cloud_storage
@@ -9,7 +8,6 @@ from libs.cloud_pubsub import get_pubsub_instance
 
 # Servicio para cargar un video
 async def save_video(video: UploadFile)-> TareaResponse:
-
     tarea_saved = crear_tarea(video.filename, "", "1")
 
     cool_storage = crear_instancia_de_cloud_storage()    
@@ -18,14 +16,11 @@ async def save_video(video: UploadFile)-> TareaResponse:
     
     tarea = actualizar_tarea_url(tarea_saved['id'], file_path)
 
-    #Enviar mensaje a kafka
-    #await send(tarea['id'])
-
     # Convertir el mensaje a bytestring
-    message_data = tarea['id'].encode()
+    message_data = str(tarea['id']).encode()
 
     #Enviar mensaje a Cloud Pub Sub
-    await pubsub_instance.publish_message(message_data)
+    pubsub_instance.publish_message(message_data)
     
     return TareaResponse(id=tarea['id'], estado="Procesando", url=file_path)
 

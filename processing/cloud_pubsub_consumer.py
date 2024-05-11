@@ -14,6 +14,7 @@ async def setup_cloud_pubsub_consumer():
         pubsub_instance = get_pubsub_instance()
 
         def callback(message_data):
+            print(f"Received message: {message_data}")
             id = int(message_data)
             asyncio.run(procesar_video(id))
 

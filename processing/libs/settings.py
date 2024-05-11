@@ -3,7 +3,8 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     BUCKET_NAME: str
-    CREDENTIAL_FILE: str
+    CREDENTIAL_FILE_STORAGE: str
+    CREDENTIAL_FILE_PUBSUB: str
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str
@@ -12,7 +13,7 @@ class Settings(BaseSettings):
     KAFKA_HOST: str
     PUBSUB_TOPIC_NAME: str
     PUBSUB_SUBSCRIPTION_NAME: str
-    
+
     model_config = SettingsConfigDict(env_file=".env")
 
     
