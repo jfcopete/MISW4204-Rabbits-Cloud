@@ -1,5 +1,5 @@
 from google.cloud import pubsub_v1
-from libs import traer_configuraciones
+from libs.settings import traer_configuraciones
 import os
 
 from functools import lru_cache
