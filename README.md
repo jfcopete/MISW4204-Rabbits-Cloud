@@ -4,7 +4,7 @@ Repositorio de Equipo (Rabbit) para el curso MISW4203 Desarrollo de software en 
 
 ## Projecto en nube
 
-El projecto esta alojado en una VM en GCP en la ruta: `34.170.76.106:8000` dentro del repositorio se encuentran las colecciones de postman para ser importadas.
+El projecto esta alojado en una VM en GCP en la ruta: `34.160.67.217` dentro del repositorio se encuentran las colecciones de postman para ser importadas.
 
 ## Iniciar el projecto en local
 
