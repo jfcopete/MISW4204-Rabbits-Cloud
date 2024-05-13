@@ -29,7 +29,7 @@ def traer_tarea_por_id(tarea_id: int) -> dict:
         tarea = session.get(Tarea, tarea_id)
         if not tarea:   
             return {"error": "Tarea no encontrada"}
-        download_link = f"http://localhost:8000/api/tasks/{tarea_id}/download"
+        download_link = f"http://34.160.67.217/api/tasks/{tarea_id}/download"
 
         tarea_response = {
         "id": tarea.id,
