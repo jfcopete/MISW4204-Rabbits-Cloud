@@ -7,7 +7,7 @@ class CoolStorage:
     def __init__(self):
         settings = traer_configuraciones()
 
-        self.credentials = settings.CREDENTIAL_FILE
+        self.credentials = settings.CREDENTIAL_FILE_STORAGE
         self.bucket = settings.BUCKET_NAME
         self.storage_client = storage.Client.from_service_account_json(self.credentials)
 
