@@ -1,6 +1,7 @@
 from google.cloud import pubsub_v1
 from libs import traer_configuraciones
 import os
+import json
 
 from functools import lru_cache
 
@@ -8,7 +9,6 @@ class CloudPubSub:
 
     def __init__(self):
         settings = traer_configuraciones()
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = settings.CREDENTIAL_FILE_PUBSUB
         self.credentials = settings.CREDENTIAL_FILE_PUBSUB
         self.topic_name = settings.PUBSUB_TOPIC_NAME
         self.subscription_name = settings.PUBSUB_SUBSCRIPTION_NAME
@@ -17,8 +17,8 @@ class CloudPubSub:
         self.project_id = self.get_project_id_from_credentials()
 
     def get_project_id_from_credentials(self):
-        import json
-        with open(self.credentials) as json_file:
+        credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_PUBSUB')
+        with open(credentials_path) as json_file:
             data = json.load(json_file)
             return data['project_id']
 
@@ -30,7 +30,6 @@ class CloudPubSub:
 
     def subscribe_to_messages(self, callback):
         subscription_path = self.subscriber.subscription_path(self.project_id, self.subscription_name)
-
         def message_handler(message):
             callback(message.data.decode('utf-8'))
             message.ack()
