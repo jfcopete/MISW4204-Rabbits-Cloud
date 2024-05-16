@@ -3,7 +3,7 @@ from sqlmodel import Session
 from libs.database import engine
 from dtos import TareaResponse
 from libs.settings import traer_configuraciones
-from IDRL.libs.cold_storage import crear_instancia_de_cloud_storage
+from libs.cold_storage import crear_instancia_de_cloud_storage
 import os
 
 # Servicio para traer todas las tareas de un piloto

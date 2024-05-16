@@ -3,7 +3,7 @@ from dtos import TareaResponse
 from servicios.tarea import crear_tarea, actualizar_tarea, actualizar_tarea_url, traer_tarea_por_id
 import os
 import cv2
-from IDRL.libs.cold_storage import crear_instancia_de_cloud_storage
+from libs.cold_storage import crear_instancia_de_cloud_storage
 from libs.cloud_pubsub import get_pubsub_instance
 
 # Servicio para cargar un video

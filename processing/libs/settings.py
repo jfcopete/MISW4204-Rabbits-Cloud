@@ -4,13 +4,13 @@ from functools import lru_cache
 class Settings(BaseSettings):
     BUCKET_NAME: str
     CREDENTIAL_FILE_STORAGE: str
-    CREDENTIAL_FILE_PUBSUB: str
     DB_NAME: str
     DB_USER: str
     DB_PASSWORD: str
     DB_HOST: str
     DB_PORT: int
     KAFKA_HOST: str
+    CREDENTIAL_FILE_PUBSUB: str
     PUBSUB_TOPIC_NAME: str
     PUBSUB_SUBSCRIPTION_NAME: str
     SERVER_IP: str
