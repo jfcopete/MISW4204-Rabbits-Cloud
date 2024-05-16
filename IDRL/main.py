@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from libs.cool_storage import crear_instancia_de_cloud_storage
+from IDRL.libs.cold_storage import crear_instancia_de_cloud_storage
 from libs.settings import traer_configuraciones
 from rutas import piloto_ruta, video_ruta
 

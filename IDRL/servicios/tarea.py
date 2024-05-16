@@ -2,6 +2,8 @@ from modelos import Piloto, Tarea
 from sqlmodel import Session
 from libs.database import engine
 from dtos import TareaResponse
+from libs.settings import traer_configuraciones
+from IDRL.libs.cold_storage import crear_instancia_de_cloud_storage
 import os
 
 # Servicio para traer todas las tareas de un piloto
@@ -25,11 +27,13 @@ def traer_tareas_por_piloto(piloto_id: int, max: int, orden: int) -> list[TareaR
 
 # Servicio para traer una tarea por id
 def traer_tarea_por_id(tarea_id: int) -> dict:
+    settings = traer_configuraciones()
+
     with Session(engine) as session:
         tarea = session.get(Tarea, tarea_id)
         if not tarea:   
             return {"error": "Tarea no encontrada"}
-        download_link = f"http://34.160.67.217/api/tasks/{tarea_id}/download"
+        download_link = f"http://{settings.SERVER_IP}/api/tasks/{tarea_id}/download"
 
         tarea_response = {
         "id": tarea.id,
@@ -86,10 +90,27 @@ def actualizar_tarea(tarea_id: int) -> TareaResponse:
 def borrar_tarea_por_id(tarea_id: int) -> TareaResponse:
     with Session(engine) as session:
         tarea = session.get(Tarea, tarea_id)
+
         if not tarea:
             return {
                 "error": "Tarea no encontrada"
             }
+        
+        if tarea.estado != "processed":
+            return {
+                "error": "Tarea no ha sido procesada"
+            }
+        
+        
+        try:
+            cold_storage = crear_instancia_de_cloud_storage()
+            cold_storage.delete_file(tarea_id, f'original_{tarea.nombre_archivo}')
+            cold_storage.delete_file(tarea_id, f'editado_{tarea.nombre_archivo}')
+        except Exception as e:
+            return {
+                "error": "Error al borrar el archivo"
+            }            
+
         tarea.estado = "deleted"
         session.commit()
         return {

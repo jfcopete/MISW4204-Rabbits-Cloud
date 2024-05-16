@@ -3,7 +3,7 @@ from google.cloud import storage
 from libs import traer_configuraciones
 
 from functools import lru_cache
-class CoolStorage:
+class ColdStorage:
 
     def __init__(self):
         settings = traer_configuraciones()
@@ -32,7 +32,16 @@ class CoolStorage:
         bytes_buffer = blob.download_as_bytes()
 
         return bytes_buffer
+
+    def delete_file(self, video_id: int, file_name: str):
+        bucket = self.storage_client.get_bucket(self.bucket)
+        blob = bucket.blob(f'videos/{video_id}/{file_name}')
+
+        if not blob.exists():
+            raise HTTPException(status_code=404, detail="Archivo no encontrado")
+
+        return blob.delete()
     
 @lru_cache
 def crear_instancia_de_cloud_storage():
-    return CoolStorage()
+    return ColdStorage()

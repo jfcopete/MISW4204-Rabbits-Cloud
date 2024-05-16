@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     KAFKA_HOST: str
     PUBSUB_TOPIC_NAME: str
     PUBSUB_SUBSCRIPTION_NAME: str
+    SERVER_IP: str
 
     model_config = SettingsConfigDict(env_file=".env")
 
