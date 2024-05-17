@@ -8,19 +8,17 @@ from functools import lru_cache
 class CloudPubSub:
 
     def __init__(self):
-        settings = traer_configuraciones()
-        self.credentials = settings.CREDENTIAL_FILE_PUBSUB
-        self.topic_name = settings.PUBSUB_TOPIC_NAME
-        self.subscription_name = settings.PUBSUB_SUBSCRIPTION_NAME
-        self.publisher = pubsub_v1.PublisherClient()
-        self.subscriber = pubsub_v1.SubscriberClient()
-        self.project_id = self.get_project_id_from_credentials()
+        self.credentials = os.environ.get("CREDENTIAL_FILE_PUBSUB")
+        self.topic_name = os.environ.get("PUBSUB_TOPIC_NAME")
+        self.subscription_name = os.environ.get("PUBSUB_SUBSCRIPTION_NAME")
 
-    def get_project_id_from_credentials(self):
-        credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_PUBSUB')
-        with open(credentials_path) as json_file:
-            data = json.load(json_file)
-            return data['project_id']
+        credentials_dict = json.loads(self.credentials)
+        self.publisher = pubsub_v1.PublisherClient.from_service_account_info(credentials_dict)
+        self.subscriber = pubsub_v1.SubscriberClient.from_service_account_info(credentials_dict)
+        self.project_id = self.get_project_id_from_credentials(credentials_dict)
+
+    def get_project_id_from_credentials(self, credentials_dict):
+        return credentials_dict['project_id']
 
     def publish_message(self, message_data):
         topic_path = self.publisher.topic_path(self.project_id, self.topic_name)

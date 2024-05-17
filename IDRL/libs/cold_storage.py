@@ -3,15 +3,16 @@ from google.cloud import storage
 from libs import traer_configuraciones
 from functools import lru_cache
 import os
+import json
 
 class ColdStorage:
 
     def __init__(self):
-        settings = traer_configuraciones()
-        self.bucket = settings.BUCKET_NAME
-        self.storage_client = storage.Client.from_service_account_json(
-            os.getenv('GOOGLE_APPLICATION_CREDENTIALS_STORAGE')
-        )
+            self.credentials = os.environ.get("CREDENTIAL_FILE_STORAGE")
+            self.bucket = os.environ.get("BUCKET_NAME")
+
+            credentials_dict = json.loads(self.credentials)
+            self.storage_client = storage.Client.from_service_account_info(credentials_dict)
 
     def upload_file(self, video_id: int, archivo):
         bucket = self.storage_client.get_bucket(self.bucket)
