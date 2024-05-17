@@ -30,7 +30,7 @@ def traer_tarea_por_id(tarea_id: int) -> dict:
     settings = traer_configuraciones()
 
     with Session(engine) as session:
-        tarea = session.get(Tarea, tarea_id)
+        tarea = session.query(Tarea).filter(Tarea.id == tarea_id).first()
         if not tarea:   
             return {"error": "Tarea no encontrada"}
         download_link = f"http://{settings.SERVER_IP}/api/tasks/{tarea_id}/download"
@@ -87,20 +87,19 @@ def actualizar_tarea(tarea_id: int) -> TareaResponse:
         }
 
 # Servicio para borrar una tarea
-def borrar_tarea_por_id(tarea_id: int) -> TareaResponse:
+def borrar_tarea_por_id(tarea_id: int) -> dict:
     with Session(engine) as session:
-        tarea = session.get(Tarea, tarea_id)
+        tarea = session.query(Tarea).filter(Tarea.id == tarea_id).first()
 
         if not tarea:
             return {
                 "error": "Tarea no encontrada"
             }
         
-        if tarea.estado != "processed":
+        if tarea.estado.value != "processed":
             return {
                 "error": "Tarea no ha sido procesada"
             }
-        
         
         try:
             cold_storage = crear_instancia_de_cloud_storage()
