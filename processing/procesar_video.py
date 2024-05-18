@@ -32,6 +32,9 @@ async def procesar_video(id: int):
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_alto = int(archivo_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
+    print("frame_ancho", frame_ancho)
+    print("frame_alto", frame_alto)
+
     nuevo_frame_alto = int(frame_alto * 9 / 16)
 
     print("creando video procesado")
@@ -39,7 +42,7 @@ async def procesar_video(id: int):
     logo_dimencionado = None
     try:
         salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
-        # logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
+        logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
     except Exception as e:
         print(f"Error al crear el video procesado: {e}")
 
