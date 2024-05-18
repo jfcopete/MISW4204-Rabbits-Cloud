@@ -1,29 +1,19 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from procesar_video import procesar_video
-import json
-import asyncio
-from libs.cloud_pubsub import get_pubsub_instance
+import base64
 
 router = APIRouter()
-estado_consumidor = False  
-consumer = None  
 
-# Configura el consumidor de cloud pubsub
-async def setup_cloud_pubsub_consumer():
+@router.post("/pubsub/push")
+async def receive_message(request: Request):
     try:
-        pubsub_instance = get_pubsub_instance()
-
-        def callback(message_data):
-            print(f"Received message: {message_data}")
-            id = int(message_data)
-            asyncio.run(procesar_video(id))
-
-        pubsub_instance.subscribe_to_messages(callback)
+        body = await request.json()
+        message_data = body['message']['data']
+        # Decode the base64 message data
+        decoded_message_data = base64.b64decode(message_data).decode('utf-8')
+        print(f"Received message: {decoded_message_data}")
+        id = int(decoded_message_data)
+        await procesar_video(id)
+        return {"status": "success"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error initializing Pub/Sub consumer: {str(e)}")
-
-loop = asyncio.get_event_loop()
-if loop.is_running():
-    asyncio.create_task(setup_cloud_pubsub_consumer())
-else:
-    asyncio.run(setup_cloud_pubsub_consumer())
+        raise HTTPException(status_code=500, detail=f"Error processing message: {str(e)}")

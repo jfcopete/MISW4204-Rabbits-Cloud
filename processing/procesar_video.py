@@ -1,8 +1,6 @@
-# from servicios.tarea import actualizar_tarea
-# from servicios.kafka_services import send
 import os
 import cv2
-from libs.cool_storage import crear_instancia_de_cloud_storage
+from libs.cold_storage import crear_instancia_de_cloud_storage
 from services.tarea import traer_tarea_por_id, actualizar_tarea
 
 async def procesar_video(id: int):
@@ -13,9 +11,13 @@ async def procesar_video(id: int):
     if not tarea:
         return {"error": "Tarea no encontrada"}
 
+    print("Creando instancia de cloud storage...")
     cold_storage = crear_instancia_de_cloud_storage()
+    print("Instancia de cloud storage creada")
+    print("Descargando archivo de cloud storage...")
     cold_storage.download_file(id, tarea["nombre_archivo"])
-    
+    print("Archivo descargado")
+    print("Procesando video...")
 
     current_path = os.getcwd()
     logo = cv2.imread(f"{current_path}/img/IDRL.jpg", cv2.IMREAD_UNCHANGED)
@@ -63,13 +65,16 @@ async def procesar_video(id: int):
     # Release the video capture and writer objects
     archivo_video.release()
     salida.release()
-
+    print("Video procesado")
+    print("Subiendo video procesado a cloud storage...")
     cold_storage.upload_file(id, nombre_video_procesado)
 
+    print("Video procesado subido a cloud storage")
     borrar_archivos(tarea["nombre_archivo"])
 
+    print("Actualizando estado de la tarea...")
     actualizar_tarea(id)
-
+    print("Estado de la tarea actualizado")
     # Se actualiza el estado de la tarea al finalizar el procesamiento
     #actualizar_tarea(id)
     return f"{current_path}/videos/{id}/{nombre_video_procesado}"
