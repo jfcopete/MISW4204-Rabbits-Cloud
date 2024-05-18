@@ -1,6 +1,5 @@
 from fastapi import HTTPException
 from google.cloud import storage
-from libs import traer_configuraciones
 from functools import lru_cache
 import os
 import json
@@ -10,7 +9,6 @@ class ColdStorage:
     def __init__(self):
             self.credentials = os.environ.get("CREDENTIAL_FILE_STORAGE")
             self.bucket = os.environ.get("BUCKET_NAME")
-
             credentials_dict = json.loads(self.credentials)
             self.storage_client = storage.Client.from_service_account_info(credentials_dict)
 
