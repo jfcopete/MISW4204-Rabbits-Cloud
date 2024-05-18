@@ -27,8 +27,9 @@ class ColdStorage:
         if not blob.exists():
             raise HTTPException(status_code=404, detail="Archivo no encontrado")
         print("blob exists")
-        bytes_buffer = blob.download_as_bytes()
-        return bytes_buffer
+        #bytes_buffer = blob.download_as_bytes()
+        blob.download_to_filename(f"{file_name}")
+        #return bytes_buffer
 
     def delete_file(self, video_id: int, file_name: str):
         bucket = self.storage_client.get_bucket(self.bucket)

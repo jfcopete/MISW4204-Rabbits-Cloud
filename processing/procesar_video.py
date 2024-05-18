@@ -6,6 +6,7 @@ from services.tarea import traer_tarea_por_id, actualizar_tarea
 async def procesar_video(id: int):
 
     tarea = traer_tarea_por_id(id)
+    print("tarea", tarea)
 
     if not tarea:
         return {"error": "Tarea no encontrada"}
