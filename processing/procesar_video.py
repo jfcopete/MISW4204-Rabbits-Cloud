@@ -32,7 +32,7 @@ async def procesar_video(id: int):
     
     print("asignando nombre video procesado")
     nombre_video_procesado = f"editado_{tarea['nombre_archivo']}"
-    output_path = f"{nombre_video_procesado}"
+    output_path = f"/tmp/{nombre_video_procesado}"
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_alto = int(archivo_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -40,9 +40,15 @@ async def procesar_video(id: int):
     nuevo_frame_alto = int(frame_alto * 9 / 16)
 
     print("creando video procesado")
-    salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
-    logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
+    salida = None
+    logo_dimencionado = None
+    try:
+        salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
+        logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
+    except Exception as e:
+        print(f"Error al crear el video procesado: {e}")
 
+    return 
     print("procesando video")
     frame_count = 0
     while archivo_video.isOpened():
