@@ -4,14 +4,11 @@ from libs.cold_storage import crear_instancia_de_cloud_storage
 from services.tarea import traer_tarea_por_id, actualizar_tarea
 
 async def procesar_video(id: int):
-
     tarea = traer_tarea_por_id(id)
-    print("tarea", tarea)
 
     if not tarea:
         return {"error": "Tarea no encontrada"}
 
-    
     cold_storage = crear_instancia_de_cloud_storage()    
     cold_storage.download_file(id, tarea["nombre_archivo"])
 
@@ -24,13 +21,10 @@ async def procesar_video(id: int):
     fps = archivo_video.get(cv2.CAP_PROP_FPS)
     
     nombre_video_procesado = f"editado_{tarea['nombre_archivo']}"
-    output_path = f"/tmp/{nombre_video_procesado}"
+    output_path = f"{current_path}/{nombre_video_procesado}"
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_alto = int(archivo_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-    print("frame_ancho", frame_ancho)
-    print("frame_alto", frame_alto)
 
     nuevo_frame_alto = int(frame_alto * 9 / 16)
     
@@ -40,10 +34,7 @@ async def procesar_video(id: int):
         salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
         logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
     except Exception as e:
-        print(f"Error al crear el video procesado: {e}")
         return {"error": "Error al crear el video procesado"}
-
-    print(os.listdir(f"{current_path}/img"))    
     
     frame_count = 0
     while archivo_video.isOpened():
@@ -65,26 +56,21 @@ async def procesar_video(id: int):
         frame_dimencionado = cv2.resize(frame, (frame_ancho, nuevo_frame_alto))
 
         # Write the processed frame to the output video
+        # Add keyframe interval
+        if frame_count % int(fps) == 0:
+            salida.set(cv2.VIDEOWRITER_PROP_QUALITY, 1)  # Forcing keyframe every second
         salida.write(frame_dimencionado)
 
         frame_count += 1
 
-    print("Video procesado 1")
-    # Release the video capture and writer objects
     archivo_video.release()
     salida.release()
-    print("Video procesado 2")
-    print("Subiendo video procesado a cloud storage...")
     cold_storage.upload_file(id, nombre_video_procesado)
 
-    print("Video procesado subido a cloud storage")
     borrar_archivos(tarea["nombre_archivo"])
 
-    print("Actualizando estado de la tarea...")
     actualizar_tarea(id)
-    print("Estado de la tarea actualizado")
-    # Se actualiza el estado de la tarea al finalizar el procesamiento
-    #actualizar_tarea(id)
+
     return f"{current_path}/videos/{id}/{nombre_video_procesado}"
 
 
