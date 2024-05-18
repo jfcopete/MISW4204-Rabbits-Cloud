@@ -13,9 +13,9 @@ class ColdStorage:
 
     def upload_file(self, video_id: int, archivo: str):
         bucket = self.storage_client.get_bucket(self.bucket)
-        file_path = f"videos/{video_id}/editado_{archivo.filename}"
+        file_path = f"videos/{video_id}/{archivo}"
         blob = bucket.blob(file_path)
-        blob.upload_from_file(archivo.file, content_type='video/mp4')
+        blob.upload_from_file(archivo, content_type='video/mp4')
         return f'{file_path}'
     
     def download_file(self, video_id: int, file_name: str = 'pepe.mp4'):
