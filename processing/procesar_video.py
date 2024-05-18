@@ -16,17 +16,13 @@ async def procesar_video(id: int):
     cold_storage.download_file(id, tarea["nombre_archivo"])
 
     current_path = os.getcwd()
-    print("obteniendo logo", current_path)
     logo = cv2.imread(f"{current_path}/img/IDRL.jpg", cv2.IMREAD_UNCHANGED)
 
-    print("obteniendo video", logo)
     path = f"{current_path}/{tarea['nombre_archivo']}"
     archivo_video = cv2.VideoCapture(path)
 
-    print("obteniendo fps")
     fps = archivo_video.get(cv2.CAP_PROP_FPS)
     
-    print("asignando nombre video procesado")
     nombre_video_procesado = f"editado_{tarea['nombre_archivo']}"
     output_path = f"/tmp/{nombre_video_procesado}"
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
@@ -37,8 +33,7 @@ async def procesar_video(id: int):
     print("frame_alto", frame_alto)
 
     nuevo_frame_alto = int(frame_alto * 9 / 16)
-
-    print("creando video procesado")
+    
     salida = None
     logo_dimencionado = None
     try:
@@ -46,10 +41,10 @@ async def procesar_video(id: int):
         logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
     except Exception as e:
         print(f"Error al crear el video procesado: {e}")
+        return {"error": "Error al crear el video procesado"}
 
-    print(os.listdir(f"{current_path}/img"))
-    return 
-    print("procesando video")
+    print(os.listdir(f"{current_path}/img"))    
+    
     frame_count = 0
     while archivo_video.isOpened():
         ret, frame = archivo_video.read()

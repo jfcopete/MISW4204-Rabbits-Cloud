@@ -18,12 +18,11 @@ class ColdStorage:
         blob.upload_from_file(archivo.file, content_type='video/mp4')
         return f'{file_path}'
     
-    def download_file(self, video_id: int, file_name: str):
+    def download_file(self, video_id: int, file_name: str = 'pepe.mp4'):
         print("download file", video_id, file_name)
         bucket = self.storage_client.get_bucket(self.bucket)
         print("bucket: ", bucket)
-        blob = bucket.blob(f'videos/{video_id}/original_{file_name}')
-        print("blob: ", blob)
+        blob = bucket.blob(f'videos/{video_id}/original_{file_name}')        
         if not blob.exists():
             raise HTTPException(status_code=404, detail="Archivo no encontrado")
         print("blob exists")
