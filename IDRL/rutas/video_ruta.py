@@ -18,7 +18,7 @@ def descargar_video(tarea_id: int):
     try: 
         contenido_archivo = descargar_video_procesado(tarea_id)
     except Exception as e:
-        return {"error": "Descargando el video"}
+        return {"error": "No fue posible descargando el video"}
     
     if not contenido_archivo:
         return {"error": "Video procesado no encontrado"}

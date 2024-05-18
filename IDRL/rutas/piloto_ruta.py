@@ -40,7 +40,7 @@ def traer_tarea(id_task: int):
     return tarea
 
 #Endpoint para borrar una tarea por id
-@router.delete("/api/tasks/{id_task}", status_code=status.HTTP_200_OK, response_model=TareaResponse, dependencies=[Depends(JWTBearer())])
+@router.delete("/api/tasks/{id_task}", status_code=status.HTTP_200_OK, dependencies=[Depends(JWTBearer())])
 def borrar_tarea(id_task: int):
     tarea = borrar_tarea_por_id(id_task)
     if tarea is None:
