@@ -48,6 +48,7 @@ async def procesar_video(id: int):
     except Exception as e:
         print(f"Error al crear el video procesado: {e}")
 
+    print(os.listdir('.'))
     return 
     print("procesando video")
     frame_count = 0
