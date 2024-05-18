@@ -4,26 +4,21 @@ from libs.cold_storage import crear_instancia_de_cloud_storage
 from services.tarea import traer_tarea_por_id, actualizar_tarea
 
 async def procesar_video(id: int):
-    print(f"Procesando video {id}")
 
     tarea = traer_tarea_por_id(id)
 
     if not tarea:
         return {"error": "Tarea no encontrada"}
 
-    print("Creando instancia de cloud storage...")
-    cold_storage = crear_instancia_de_cloud_storage()
-    print("Instancia de cloud storage creada")
-    print("Descargando archivo de cloud storage...")
+    
+    cold_storage = crear_instancia_de_cloud_storage()    
     cold_storage.download_file(id, tarea["nombre_archivo"])
-    print("Archivo descargado")
-    print("Procesando video...")
 
     current_path = os.getcwd()
     print("obteniendo logo", current_path)
     logo = cv2.imread(f"{current_path}/img/IDRL.jpg", cv2.IMREAD_UNCHANGED)
 
-    print("obteniendo video")
+    print("obteniendo video", logo)
     path = f"{current_path}/{tarea['nombre_archivo']}"
     archivo_video = cv2.VideoCapture(path)
 
@@ -48,7 +43,7 @@ async def procesar_video(id: int):
     except Exception as e:
         print(f"Error al crear el video procesado: {e}")
 
-    print(os.listdir('.'))
+    print(os.listdir(f"{current_path}/img"))
     return 
     print("procesando video")
     frame_count = 0
