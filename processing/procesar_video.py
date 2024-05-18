@@ -19,8 +19,8 @@ async def procesar_video(id: int):
     print("Archivo descargado")
     print("Procesando video...")
 
-    print("obteniendo logo")
     current_path = os.getcwd()
+    print("obteniendo logo", current_path)
     logo = cv2.imread(f"{current_path}/img/IDRL.jpg", cv2.IMREAD_UNCHANGED)
 
     print("obteniendo video")
@@ -44,7 +44,7 @@ async def procesar_video(id: int):
     logo_dimencionado = None
     try:
         salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
-        logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
+        # logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
     except Exception as e:
         print(f"Error al crear el video procesado: {e}")
 
