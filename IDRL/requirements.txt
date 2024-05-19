@@ -11,3 +11,4 @@ pydantic-settings==2.2.1
 google-cloud-storage
 google-cloud-pubsub
 google-cloud-secret-manager==2.10.0
+cloud-sql-python-connector[pg8000]==0.6.0 
