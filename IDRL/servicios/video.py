@@ -30,7 +30,7 @@ def descargar_video_procesado(video_id: int):
         return None
     
     cool_storage = crear_instancia_de_cloud_storage()
-    bytes = cool_storage.download_file(video_id, f'original_{tarea["nombre_archivo"]}')
+    bytes = cool_storage.download_file(video_id, f'editado_{tarea["nombre_archivo"]}')
     
     return bytes
 

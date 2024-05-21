@@ -33,7 +33,7 @@ def traer_tarea_por_id(tarea_id: int) -> dict:
         tarea = session.query(Tarea).filter(Tarea.id == tarea_id).first()
         if not tarea:   
             return {"error": "Tarea no encontrada"}
-        download_link = f"http://{settings.SERVER_IP}/api/tasks/{tarea_id}/download"
+        download_link = f"{settings.SERVER_IP}/api/tasks/{tarea_id}/download"
 
         tarea_response = {
         "id": tarea.id,
