@@ -1,22 +1,34 @@
-
 import os
 from sqlmodel import SQLModel, create_engine
-from libs.settings import traer_configuraciones
+from google.cloud.sql.connector import Connector, IPTypes
+import sqlalchemy
 
-## connect to sqlLite
-# directorio = os.path.abspath(os.getcwd())
-# db_directorio = os.path.join(directorio, 'IDRL.db')
-# engine = create_engine('sqlite:///' + db_directorio, echo=False)
+# Función para obtener la URL de la base de datos
+def get_connection():
+    connector = Connector(ip_type=IPTypes.PUBLIC)  # o IPTypes.PRIVATE si estás usando IP privada
+    instance_connection_name = os.getenv("INSTANCE_CONNECTION_NAME")
+    db_user = os.getenv("DB_USER")
+    db_pass = os.getenv("DB_PASSWORD")
+    db_name = os.getenv("DB_NAME")
 
-## connect to postgres
-configuraciones = traer_configuraciones()
-pg_url = "postgresql://{}:{}@{}:{}/{}".format(
-    configuraciones.DB_USER, configuraciones.DB_PASSWORD, configuraciones.DB_HOST, configuraciones.DB_PORT, configuraciones.DB_NAME
-)
+    connection = connector.connect(
+        instance_connection_name,
+        "pg8000",
+        user=db_user,
+        password=db_pass,
+        db=db_name
+    )
+    return connection
+
+# Configurar el motor de SQLAlchemy
 engine = create_engine(
-    pg_url, echo=False
+    "postgresql+pg8000://",
+    creator=get_connection,
+    echo=False
 )
 
-# valid for both sqlite and postgres
+# Crear tablas
 SQLModel.metadata.create_all(engine)
+
+
 
