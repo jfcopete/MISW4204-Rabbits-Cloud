@@ -19,8 +19,10 @@ class ColdStorage:
             bucket = self.storage_client.get_bucket(self.bucket)
             ruta_destino = f"videos/{video_id}/{archivo}"
             blob = bucket.blob(ruta_destino)
+            blob.content_disposition = "attachment"
             with open(ruta_origen, 'rb') as file:
                 blob.upload_from_file(file, content_type='video/mp4')
+            blob.patch()
             return f'{ruta_destino}'
         except Exception as e:
             print("Error al subir el archivo:", str(e))

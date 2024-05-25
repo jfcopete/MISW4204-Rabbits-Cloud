@@ -9,32 +9,45 @@ async def procesar_video(id: int):
     if not tarea:
         return {"error": "Tarea no encontrada"}
 
-    cold_storage = crear_instancia_de_cloud_storage()    
+    cold_storage = crear_instancia_de_cloud_storage()
     cold_storage.download_file(id, tarea["nombre_archivo"])
 
     current_path = os.getcwd()
-    logo = cv2.imread(f"{current_path}/img/IDRL.jpg", cv2.IMREAD_UNCHANGED)
+    logo_path = f"{current_path}/img/IDRL.jpg"
+    
+    if not os.path.isfile(logo_path):
+        return {"error": "Logo file not found"}
+    
+    logo = cv2.imread(logo_path, cv2.IMREAD_UNCHANGED)
 
-    path = f"{current_path}/{tarea['nombre_archivo']}"
-    archivo_video = cv2.VideoCapture(path)
+    video_path = f"{current_path}/{tarea['nombre_archivo']}"
+    
+    if not os.path.isfile(video_path):
+        return {"error": "Video file not found"}
+    
+    archivo_video = cv2.VideoCapture(video_path)
+
+    if not archivo_video.isOpened():
+        return {"error": "Cannot open video file"}
 
     fps = archivo_video.get(cv2.CAP_PROP_FPS)
     
     nombre_video_procesado = f"editado_{tarea['nombre_archivo']}"
     output_path = f"{current_path}/{nombre_video_procesado}"
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v") 
     frame_ancho = int(archivo_video.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_alto = int(archivo_video.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    nuevo_frame_alto = int(frame_alto * 9 / 16)
+    nuevo_frame_alto = int(frame_ancho * 9 / 16)
     
-    salida = None
-    logo_dimencionado = None
+    if nuevo_frame_alto % 2 != 0:
+        nuevo_frame_alto += 1
+
     try:
         salida = cv2.VideoWriter(output_path, fourcc, fps, (frame_ancho, nuevo_frame_alto))
         logo_dimencionado = cv2.resize(logo, (frame_ancho, frame_alto))
     except Exception as e:
-        return {"error": "Error al crear el video procesado"}
+        return {"error": f"Error al crear el video procesado: {e}"}
     
     frame_count = 0
     while archivo_video.isOpened():
@@ -48,33 +61,31 @@ async def procesar_video(id: int):
         if frame_count > 18 * fps:
             frame[0:frame_alto, 0:frame_ancho] = logo_dimencionado
 
-        # Check if we have reached 20 seconds
-        if frame_count >= 20 * fps:            
+        if frame_count >= 20 * fps:
             break
 
-        # Resize the frame 9:16 aspect ratio
         frame_dimencionado = cv2.resize(frame, (frame_ancho, nuevo_frame_alto))
 
-        # Write the processed frame to the output video
-        # Add keyframe interval
-        if frame_count % int(fps) == 0:
-            salida.set(cv2.VIDEOWRITER_PROP_QUALITY, 1)  # Forcing keyframe every second
         salida.write(frame_dimencionado)
 
         frame_count += 1
 
     archivo_video.release()
     salida.release()
-    cold_storage.upload_file(id, nombre_video_procesado)
+    
+    try:
+        cold_storage.upload_file(id, nombre_video_procesado)
+    except Exception as e:
+        return {"error": f"Error al subir el video procesado: {e}"}
 
-    borrar_archivos(tarea["nombre_archivo"])
+    borrar_archivos(video_path, output_path)
 
     actualizar_tarea(id)
 
-    return f"{current_path}/videos/{id}/{nombre_video_procesado}"
+    return f"{current_path}/{nombre_video_procesado}"
 
 
-def borrar_archivos(nombre_archivo: str):
-    os.remove(nombre_archivo)
-    os.remove(f"editado_{nombre_archivo}")
-
+def borrar_archivos(*archivos: str):
+    for archivo in archivos:
+        if os.path.isfile(archivo):
+            os.remove(archivo)
