@@ -2,70 +2,32 @@
 
 Repositorio de Equipo (Rabbit) para el curso MISW4203 Desarrollo de software en la nube
 
-## Projecto en nube
+## Despliegue en PaaS. Migración de la aplicación WEB a plataforma como servicio en la nube pública.
 
-Este proyecto está alojado en Máquinas Virtual (VM) en Google Cloud Platform (GCP) y se puede acceder a través del balanceador de carga con la dirección IP 34.160.67.217. Dentro del repositorio, encontrarás las colecciones de Postman listas para ser importadas y utilizadas.
+El proyecto esta desplegado en su totalidad en la nube pública de Google Cloud Platform (GCP). 
 
-## Iniciar el projecto en local
+Para la capa WEB se cuenta con un servicio de Cloud Rud disponible en la ruta: `https://app-sql-v1-cx5bp6smwq-uc.a.run.app`.
+Este servicio cuenta todas las funcionalidades de la capa WEB incluyendo Login, carga de objetos (video original) a Cloud Storage, escritura y lectura de datos de tareas de procesamiento en servicio de base de datos de Cloud SQL, envío de mensaje a Cloud Pub/Sub para comunicación asincrona con la capa WORKER, eliminación de tareas que ya esten procesadas en la base de datos y eliminación de objetos (video original y editado) de Cloud Storage.
 
-### Descripción de Componentes
+Para la capa WORKER se cuenta con un servicio de Cloud Run, este servicio recibe solicitudes http de una subscripción tipo PUSH configurada en Cloud Pub/Sub, con cada solicitud ejecuta una tarea de procesamiento de un video, al finalizar almacena el objeto (video editado) en el bucket de Cloud Storage y modifica los datos de la tarea de procesamiento correspondiente en el servicio de base de datos de Cloud SQL.
 
-**IDRL (servicio REST API)**: Este servicio gestiona las solicitudes (CRUD) relacionadas con el negocio, autenticación, consultas de estados y carga de videos. Está conectado a Google Cloud y utiliza Cloud SQL para el almacenamiento de datos.
-**Kafka (cola de mensajes)**: Se utiliza como un conector asíncrono entre el servicio IDRL y Processing para la comunicación de mensajes.
-**PostgreSQL**: Base de datos relacional utilizada para almacenar datos relacionados con el proyecto.
-**Processing**: Este servicio está dedicado al procesamiento de videos, incluida la edición. Al igual que IDRL, está conectado a Google Cloud y utiliza Cloud SQL para el almacenamiento de datos.
+### Imagenes docker
 
-### Requisitos
+Cada servicio Cloud Run cuenta con una imagen docker desplegada, estas imagenes estan almacenadas en `Artifact Registry` de `Cloud GCP`
+El servicio correspondiente a la capa WEB tiene la imagen docker generada por el archivo: `IDRL/Dockerfile` del repositorio en la rama `app_sql`.
+El servicio correspondiente a la capa WORKER tiene la imagen docker generada por el archivo: `processing/Dockerfile` del repositorio en la rama `app_sql`.
 
-- Docker
-- docker compose
+### Requisitos para usar la aplicación.
+
+- Postman para realizar las peticiones.
+- Base de datos de Cloud SQL aprovisionada en el proyecto. (La base de datos se ha eliminado por el presupuesto limitado). 
 
 ### Comandos de inicio
 
-El proyecto está organizado en cuatro carpetas, una para cada uno de los proyectos mencionados:
+En caso de requerir el uso de la aplicación, por favor comunicarse con el equipo para aprovisionar la base de datos.
 
-**IDRL:** Contiene el archivo run_app.sh, que se utiliza para ejecutar el servicio REST API.
-**Kafka:** Contiene el archivo run_app.sh, que se utiliza para ejecutar el servicio de cola de mensajes Kafka.
-**PostgreSQL:** Contiene el archivo run_app.sh, que se utiliza para ejecutar la base de datos PostgreSQL.
-**Processing:** Contiene el archivo run_app.sh, que se utiliza para ejecutar el servicio de procesamiento de videos.
+## Documentación de APIs
 
-**Consideraciones Individuales:**
+Para acceder a la documentación de la API de la capa WEB `https://app-sql-v1-cx5bp6smwq-uc.a.run.app/docs#/`
+Para acceder a la documentación de la API de la capa WORKER `https://processing-sql-v1-cx5bp6smwq-uc.a.run.app/docs#/`
 
-Es esencial seguir un orden específico al iniciar los servicios. La base de datos y el servicio de colas deben iniciarse antes que los servicios del API y el procesador de videos, ya que estos últimos dependen de que los primeros estén disponibles para su ejecución.
-
-**Kafka:**
-
-Dirígete a la carpeta _kafka_ y ejecuta el script `bash run_app.sh`.
-
-**PostgreSQL:**
-
-Dirígete a la carpeta _postgress_ y ejecuta el script `bash run_app.sh`.
-
-(Opcional) Si deseas inicializar la base de datos, puedes conectarla mediante un PgAdmin u otro visor de tu preferencia, y ejecutar las sentencias que se encuentran en el archivo `init_db.sql`.
-
-**IDRL:**
-
-Entra en la carpeta IDRL y asegúrate de agregar los siguientes archivos:
-
-- _.env_ en la raíz del proyecto IDRL
-- _vinilos-bk-988ea0e24d53.json_ dentro de la carpeta _IDRL/libs/_
-
-Luego, ejecuta el comando `bash run_app.sh`.
-
-**Processing:**
-
-Ingresa en la carpeta processing y asegúrate de agregar los siguientes archivos:
-
-- _.env_ en la raíz del proyecto processing
-- _vinilos-bk-988ea0e24d53.json_ dentro de la carpeta processing/libs/
-
-Finalmente, ejecuta el comando `bash run_app.sh`.
-
-**Nota:** Por motivos de seguridad, se han utilizado variables de entorno. Por favor, solicita estas variables a algún miembro del equipo y serán enviadas por correo electrónico.
-
-## Documentación de los endpoints
-
-Para acceder a la documentación después de haber iniciado el proyecto, dirígete a la siguiente ruta:
-
-- Localmente: [http://localhost:8000/docs#/](http://localhost:8000/docs#/)
-- En línea: [http://34.160.67.217/docs](http://34.160.67.217/docs)
